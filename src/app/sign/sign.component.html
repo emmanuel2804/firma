@@ -1,0 +1,29 @@
+<div class="container">
+    <header>
+        <a class="btn btn-primary ml-2">Volver</a>
+        <br>
+        <h2>Crea tu firma</h2>
+        
+    </header>
+      <div id="container" class="container border rounded p-0" style="width: 45vw">
+        <div class="row no-gutters">
+          <a
+            routerLinkActive="active current"
+            routerLink="/handwrite"
+            class="btn btn-outline-primary col-4 rounded-only-top-left"
+            >Mano alzada</a
+          >
+          <a
+            routerLinkActive="active current"
+            routerLink="/fontcool"
+            class="btn btn-outline-primary col-4 rounded-0"
+            >Fuente cursiva</a
+          >
+          <a routerLink="/sign" class="btn btn-outline-primary col-4 rounded-only-top-right"
+            >Subir</a
+          >
+        </div>
+        <router-outlet></router-outlet>
+      </div>
+</div>  
+  

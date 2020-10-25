@@ -1,0 +1,19 @@
+.container {
+  margin: 0 auto;
+  width: 50%;
+}
+header {
+  margin-top: 20px;
+}
+h2 {
+  text-align: center;
+}
+.rounded-only-top-left {
+  border-radius: 0;
+  border-top-left-radius: 0.25rem;
+}
+
+.rounded-only-top-right {
+  border-radius: 0;
+  border-top-right-radius: 0.25rem;
+}

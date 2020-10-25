@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+    <div class="col-4 pl-0">
+      <div class="btn-group-vertical" role="group">
+        <button
+          (click)="onClick1()"
+          type="button"
+          class="btn btn-outline-primary fontcool1 rounded-0"
+          [class.active]="active1"
+        >
+          Emmanuel
+        </button>
+        <button
+          (click)="onClick2()"
+          type="button"
+          class="btn btn-outline-primary fontcool2"
+          [class.active]="active2"
+        >
+          Emmanuel
+        </button>
+        <button
+          (click)="onClick3()"
+          type="button"
+          class="btn btn-outline-primary fontcool3"
+          [class.active]="active3"
+        >
+          Emmanuel
+        </button>
+      </div>
+    </div>
+    <div class="col-8">
+      <h1 class="mt-4" [class]="fontClass">Emmanuel</h1>
+    </div>
+  </div>
+</div>
