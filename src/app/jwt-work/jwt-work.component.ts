@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { JWK, JWS, JWT } from 'jose';
-import * as utils from './utils';
+// import { JWK, JWS, JWT } from 'jose';
+import { RSA_PRIVATE_KEY, RSA_PRIVATE_KEY_CA, pass } from './utils';
+import { sign } from 'jsonwebtoken';
+import { JWK, JWS } from 'node-jose';
+// const { JWT } = require('jose');
 
 @Component({
   selector: 'app-jwt-work',
@@ -8,16 +11,53 @@ import * as utils from './utils';
   styleUrls: ['./jwt-work.component.css'],
 })
 export class JwtWorkComponent implements OnInit {
-  jwtBearerToken;
+  constructor() {}
 
-  constructor() {
-    console.log(utils.RSA_PRIVATE_KEY);
+  testJose() {
+    console.log(RSA_PRIVATE_KEY);
     var rs = require('jsrsasign');
-    var prvKey = rs.KEYUTIL.getKey(utils.RSA_PRIVATE_KEY, utils.pass);
+    var prvKey = rs.KEYUTIL.getKey(RSA_PRIVATE_KEY, pass);
     console.log(prvKey);
 
-    let joseRSAKey = JWK.asKey(utils.RSA_PRIVATE_KEY);
-    console.log(joseRSAKey);
+    // error getCurves is not a function
+    // https://github.com/panva/jose/issues/72 (import JWK con const, no sirve)
+    // let joseRSAKey = JWK.asKey(RSA_PRIVATE_KEY);
+    // console.log(joseRSAKey);
+
+    // siguiente paso, usar JWT.sign que recibe un JWK.Key
+  }
+
+  testJsonwebtoken() {
+    // error
+    // Cannot read property 'isZero' of undefined
+    // ----------------
+    // https://community.auth0.com/t/cannot-read-property-iszero-of-undefined/20972
+    // sin solucion
+    return sign({ foo: 'bar', key: pass }, RSA_PRIVATE_KEY_CA, {
+      algorithm: 'RS256',
+    });
+  }
+
+  async testNodeJose() {
+    let keystore = JWK.createKeyStore();
+    let key = await JWK.asKey(RSA_PRIVATE_KEY_CA, 'pem');
+    console.log(key);
+
+    let payload = JSON.stringify({
+      sub: '1234567890',
+      name: 'Eric D.',
+      role: 'admin',
+      iat: 1516239022,
+    });
+
+    // unsupported algorithm
+    // pero si pruebo con RS256 que es el que viene
+    // en los ejemplos me da el mismo error
+    // puede que el problema sea con el algoritmo utilizado para cifrar la llave
+    let token = await JWS.createSign({ alg: 'PS256', format: 'JWT' }, key)
+      .update(payload, 'utf8')
+      .final();
+    console.log(token);
   }
 
   ngOnInit(): void {}
