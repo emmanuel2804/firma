@@ -4,6 +4,7 @@ import { RSA_PRIVATE_KEY, RSA_PRIVATE_KEY_CA, pass } from './utils';
 import { sign } from 'jsonwebtoken';
 import { JWK, JWS } from 'node-jose';
 // const { JWT } = require('jose');
+import * as rs from 'jsrsasign';
 
 @Component({
   selector: 'app-jwt-work',
@@ -11,11 +12,12 @@ import { JWK, JWS } from 'node-jose';
   styleUrls: ['./jwt-work.component.css'],
 })
 export class JwtWorkComponent implements OnInit {
-  constructor() {}
+  constructor() {
+    this.testjsrsasign();
+  }
 
   testJose() {
     console.log(RSA_PRIVATE_KEY);
-    var rs = require('jsrsasign');
     var prvKey = rs.KEYUTIL.getKey(RSA_PRIVATE_KEY, pass);
     console.log(prvKey);
 
@@ -58,6 +60,22 @@ export class JwtWorkComponent implements OnInit {
       .update(payload, 'utf8')
       .final();
     console.log(token);
+  }
+
+  testjsrsasign() {
+    let prvKey = rs.KEYUTIL.getKey(RSA_PRIVATE_KEY, pass);
+
+    // let sig = new rs.crypto.Signature({ alg: 'SHA1withRSA' });
+    // sig.init(prvKey);
+    // sig.updateString('esto es un string de prueba');
+    // let sigVal = sig.sign();
+    var sigVal = rs.jws.JWS.sign(
+      null,
+      '{"alg":"PS256"}',
+      '{"age": 21}',
+      prvKey
+    );
+    console.log(sigVal);
   }
 
   ngOnInit(): void {}
